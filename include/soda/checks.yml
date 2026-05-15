@@ -1,0 +1,24 @@
+checks for core_youtube_videos:
+  # 1. No nulls on critical columns
+  - missing_count(video_id) = 0
+  - missing_count(title) = 0
+  - missing_count(published_at) = 0
+
+  # 2. No negative counts
+  - min(view_count) >= 0
+  - min(like_count) >= 0
+  - min(comment_count) >= 0
+
+  # 3. video_type only contains expected values
+  - invalid_count(video_type) = 0:
+      valid values: [shorts, normal]
+
+checks for core_video_topics:
+  # 4. No orphaned topics - check the bridge table has data
+  - row_count > 0
+  - missing_count(video_id) = 0
+  - missing_count(topic) = 0
+
+checks for staging_youtube_videos:
+  # 5. Staging has data
+  - row_count > 0
